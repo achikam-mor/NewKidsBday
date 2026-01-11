@@ -1,0 +1,71 @@
+{
+  "recipients": {
+    "mirit.miz@gmail.com": "Mirit Mor",
+    "Bandit600s16@gmail.com": "Shlomi Mor",
+    "idanmor88@gmail.com": "Idan Mor",
+    "talasul82@gmail.com": "Tal Mor",
+    "achikamor@gmail.com": "Achikam"
+  },
+  "birthdays": [
+    {
+      "name": "Tal",
+      "birthday": "21.12",
+      "birthYear": 1990,
+      "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
+    },
+    {
+      "name": "Idan",
+      "birthday": "7.1",
+      "birthYear": 1988,
+      "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
+    },
+    {
+      "name": "Tamar",
+      "birthday": "3.1",
+      "birthYear": 2020,
+      "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
+    },
+    {
+      "name": "Ivri",
+      "birthday": "18.8",
+      "birthYear": 2021,
+      "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
+    },
+    {
+      "name": "Rom",
+      "birthday": "5.11",
+      "birthYear": 2023,
+      "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
+    },
+    {
+      "name": "Shlomi",
+      "birthday": "9.8",
+      "birthYear": 1985,
+      "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    },
+    {
+      "name": "Mirit",
+      "birthday": "26.6",
+      "birthYear": 1985,
+      "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    },
+    {
+      "name": "Itay",
+      "birthday": "13.2",
+      "birthYear": 2016,
+      "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    },
+    {
+      "name": "Meshi",
+      "birthday": "9.7",
+      "birthYear": 2019,
+      "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    },
+    {
+      "name": "Aviv",
+      "birthday": "7.4",
+      "birthYear": 2023,
+      "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    }
+  ]
+}

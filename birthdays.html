@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthdays - ימי הולדת</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #5568d3;
+        }
+
+        .birthday-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .birthday-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .birthday-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .birthday-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .birthday-info {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .birthday-info .label {
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .birthday-emoji {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .birthday-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← חזרה לעמוד הראשי</a>
+        <h1>🎂 ימי הולדת 🎉</h1>
+        <div id="birthdaysContainer" class="birthday-grid"></div>
+    </div>
+
+    <script>
+        async function loadBirthdays() {
+            try {
+                const response = await fetch('birthdays.json');
+                const data = await response.json();
+                displayBirthdays(data.birthdays);
+            } catch (error) {
+                console.error('Error loading birthdays:', error);
+                document.getElementById('birthdaysContainer').innerHTML = 
+                    '<p style="text-align: center; color: #667eea;">שגיאה בטעינת ימי ההולדת</p>';
+            }
+        }
+
+        function calculateAge(birthYear) {
+            const currentYear = new Date().getFullYear();
+            return currentYear - birthYear;
+        }
+
+        function formatDate(birthday) {
+            // Format from DD.MM to DD/MM
+            return birthday.replace('.', '/');
+        }
+
+        function displayBirthdays(birthdays) {
+            const container = document.getElementById('birthdaysContainer');
+            
+            // Sort by date (month, then day)
+            birthdays.sort((a, b) => {
+                const [dayA, monthA] = a.birthday.split('.').map(Number);
+                const [dayB, monthB] = b.birthday.split('.').map(Number);
+                
+                if (monthA !== monthB) return monthA - monthB;
+                return dayA - dayB;
+            });
+            
+            container.innerHTML = birthdays.map(person => {
+                const age = calculateAge(person.birthYear);
+                const date = formatDate(person.birthday);
+                
+                return `
+                    <div class="birthday-card">
+                        <div class="birthday-emoji">🎈</div>
+                        <h2>${person.name}</h2>
+                        <div class="birthday-info">
+                            <div><span class="label">תאריך:</span> ${date}</div>
+                            <div><span class="label">גיל נוכחי:</span> ${age}</div>
+                            <div><span class="label">שנת לידה:</span> ${person.birthYear}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load birthdays on page load
+        loadBirthdays();
+    </script>
+</body>
+</html>

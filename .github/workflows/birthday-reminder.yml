@@ -1,0 +1,27 @@
+name: Birthday Reminder
+
+on:
+  schedule:
+    # Runs at 11:00 UTC (13:00 Jerusalem/UTC+2)
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+    # Allows manual triggering for testing
+
+jobs:
+  check-birthdays:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run birthday checker
+        run: node scripts/check-birthdays.js
