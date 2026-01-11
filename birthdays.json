@@ -66,6 +66,36 @@
       "birthday": "7.4",
       "birthYear": 2023,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
+    },
+    {
+      "name": "Avital Mor",
+      "birthday": "9.11",
+      "birthYear": 1959,
+      "recipients": []
+    },
+    {
+      "name": "Achikam Mor",
+      "birthday": "21.6",
+      "birthYear": 1993,
+      "recipients": []
+    },
+    {
+      "name": "Orin Mor",
+      "birthday": "8.11",
+      "birthYear": 1994,
+      "recipients": []
+    },
+    {
+      "name": "Hen Mor",
+      "birthday": "26.5",
+      "birthYear": 1994,
+      "recipients": []
+    },
+    {
+      "name": "Mia Mor",
+      "birthday": "2.8",
+      "birthYear": 2025,
+      "recipients": []
     }
   ]
 }
