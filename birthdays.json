@@ -4,65 +4,67 @@
     "Bandit600s16@gmail.com": "Shlomi Mor",
     "idanmor88@gmail.com": "Idan Mor",
     "talasul82@gmail.com": "Tal Mor",
-    "achikamor@gmail.com": "Achikam"
+    "achikamor@gmail.com": "Achikam",
+    "OrinMor8@gmail.com": "Orin Mor",
+    "OrinMor@walla.co.il": "Avital Mor"
   },
   "birthdays": [
     {
-      "name": "Tal",
+      "name": "Tal Mor",
       "birthday": "21.12",
       "birthYear": 1990,
       "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
     },
     {
-      "name": "Idan",
+      "name": "Idan Mor",
       "birthday": "7.1",
       "birthYear": 1988,
       "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
     },
     {
-      "name": "Tamar",
+      "name": "Tamar Mor",
       "birthday": "3.1",
       "birthYear": 2020,
       "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
     },
     {
-      "name": "Ivri",
+      "name": "Ivri Mor",
       "birthday": "18.8",
       "birthYear": 2021,
       "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
     },
     {
-      "name": "Rom",
+      "name": "Rom Mor",
       "birthday": "5.11",
       "birthYear": 2023,
       "recipients": ["idanmor88@gmail.com", "talasul82@gmail.com"]
     },
     {
-      "name": "Shlomi",
+      "name": "Shlomi Mor",
       "birthday": "9.8",
       "birthYear": 1985,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
     },
     {
-      "name": "Mirit",
+      "name": "Mirit Mor",
       "birthday": "26.6",
       "birthYear": 1985,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
     },
     {
-      "name": "Itay",
+      "name": "Itay Mor",
       "birthday": "13.2",
       "birthYear": 2016,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
     },
     {
-      "name": "Meshi",
+      "name": "Meshi Mor",
       "birthday": "9.7",
       "birthYear": 2019,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
     },
     {
-      "name": "Aviv",
+      "name": "Aviv Mor",
       "birthday": "7.4",
       "birthYear": 2023,
       "recipients": ["mirit.miz@gmail.com", "Bandit600s16@gmail.com"]
@@ -71,7 +73,7 @@
       "name": "Avital Mor",
       "birthday": "9.11",
       "birthYear": 1959,
-      "recipients": []
+      "recipients": ["OrinMor@walla.co.il"]
     },
     {
       "name": "Achikam Mor",
@@ -83,7 +85,7 @@
       "name": "Orin Mor",
       "birthday": "8.11",
       "birthYear": 1994,
-      "recipients": []
+      "recipients": ["OrinMor8@gmail.com"]
     },
     {
       "name": "Hen Mor",

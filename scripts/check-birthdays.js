@@ -12,32 +12,54 @@ function loadBirthdayData() {
   return JSON.parse(data);
 }
 
-// Calculate date X months before a given date
-function getDateMonthsBefore(day, month, monthsBefore) {
-  let targetMonth = month - monthsBefore;
-  let targetDay = day;
+// Calculate date X days before a given date (handles year boundaries)
+function getDateDaysBefore(day, month, year, daysBefore) {
+  // Create a date object for the birthday in the current/next year
+  const birthdayDate = new Date(year, month - 1, day);
   
-  // Handle year boundary
-  if (targetMonth <= 0) {
-    targetMonth += 12;
-  }
+  // Subtract the days
+  const reminderDate = new Date(birthdayDate);
+  reminderDate.setDate(birthdayDate.getDate() - daysBefore);
   
-  return { day: targetDay, month: targetMonth };
+  return { 
+    day: reminderDate.getDate(), 
+    month: reminderDate.getMonth() + 1,
+    year: reminderDate.getFullYear()
+  };
 }
 
-// Check if today matches the reminder date
-function shouldSendReminder(birthday, monthsBefore) {
+// Check if today matches a specific number of days before birthday
+function shouldSendReminderDays(birthday, daysBefore) {
   const today = new Date();
   const todayDay = today.getDate();
-  const todayMonth = today.getMonth() + 1; // JavaScript months are 0-indexed
+  const todayMonth = today.getMonth() + 1;
+  const todayYear = today.getFullYear();
   
   // Parse birthday (format: "DD.MM")
   const [day, month] = birthday.split('.').map(num => parseInt(num, 10));
   
-  // Calculate the reminder date
-  const reminderDate = getDateMonthsBefore(day, month, monthsBefore);
+  // Check for this year's birthday
+  let reminderDate = getDateDaysBefore(day, month, todayYear, daysBefore);
+  if (todayDay === reminderDate.day && todayMonth === reminderDate.month && todayYear === reminderDate.year) {
+    return true;
+  }
   
-  return todayDay === reminderDate.day && todayMonth === reminderDate.month;
+  // Check for next year's birthday (in case birthday already passed this year)
+  reminderDate = getDateDaysBefore(day, month, todayYear + 1, daysBefore);
+  if (todayDay === reminderDate.day && todayMonth === reminderDate.month && todayYear === reminderDate.year) {
+    return true;
+  }
+  
+  return false;
+}
+
+// Get time description for reminder
+function getTimeDescription(daysBefore) {
+  if (daysBefore === 60) return '2 months';
+  if (daysBefore === 30) return '1 month';
+  if (daysBefore === 21) return '3 weeks';
+  if (daysBefore === 14) return '2 weeks';
+  return `${daysBefore} days`;
 }
 
 // Calculate age for upcoming birthday
@@ -48,14 +70,14 @@ function calculateUpcomingAge(birthYear) {
 }
 
 // Send email via Netlify function
-async function sendBirthdayEmail(recipientEmail, recipientName, childName, age, monthsBefore) {
+async function sendBirthdayEmail(recipientEmail, recipientName, childName, age, timeDescription) {
   try {
     const response = await axios.post(NETLIFY_FUNCTION_URL, {
       recipientEmail,
       recipientName,
       childName,
       age,
-      monthsBefore
+      timeDescription
     });
     
     console.log(`✓ Email sent to ${recipientName} (${recipientEmail}) for ${childName}'s birthday`);
@@ -81,12 +103,13 @@ async function checkBirthdays() {
   for (const birthdayEntry of birthdays) {
     const { name, birthday, birthYear, recipients: recipientEmails } = birthdayEntry;
     
-    // Check for 1 month and 2 months before
-    for (const monthsBefore of [1, 2]) {
-      if (shouldSendReminder(birthday, monthsBefore)) {
+    // Check for 2 months (60 days), 1 month (30 days), 3 weeks (21 days), and 2 weeks (14 days) before
+    for (const daysBefore of [60, 30, 21, 14]) {
+      if (shouldSendReminderDays(birthday, daysBefore)) {
         const age = calculateUpcomingAge(birthYear);
+        const timeDescription = getTimeDescription(daysBefore);
         
-        console.log(`🎂 Reminder match: ${name}'s ${age} birthday (${birthday}) - ${monthsBefore} month(s) before`);
+        console.log(`🎂 Reminder match: ${name}'s ${age} birthday (${birthday}) - ${timeDescription} before`);
         
         // Send to all recipients in the group
         const allRecipients = [...recipientEmails, 'achikamor@gmail.com'];
@@ -95,7 +118,7 @@ async function checkBirthdays() {
           const recipientName = recipients[recipientEmail] || recipientEmail;
           
           try {
-            await sendBirthdayEmail(recipientEmail, recipientName, name, age, monthsBefore);
+            await sendBirthdayEmail(recipientEmail, recipientName, name, age, timeDescription);
             emailsSent++;
           } catch (error) {
             console.error(`Failed to send email to ${recipientEmail}`);

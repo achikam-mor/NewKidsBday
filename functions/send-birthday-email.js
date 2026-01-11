@@ -8,10 +8,10 @@ exports.handler = async function(event, context) {
   
   try {
     // Parse the incoming data
-    const { recipientEmail, recipientName, childName, age, monthsBefore } = JSON.parse(event.body);
+    const { recipientEmail, recipientName, childName, age, timeDescription } = JSON.parse(event.body);
     
     // Validate required fields
-    if (!recipientEmail || !recipientName || !childName || !age || !monthsBefore) {
+    if (!recipientEmail || !recipientName || !childName || !age || !timeDescription) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Missing required fields' })
@@ -27,15 +27,13 @@ exports.handler = async function(event, context) {
       }
     });
     
-    const monthText = monthsBefore === 1 ? '1 month' : '2 months';
-    
     const mailOptions = {
       from: 'achikamor@gmail.com',
       to: recipientEmail,
       subject: `Birthday Reminder: ${childName}'s ${age} birthday`,
       text: `Dear ${recipientName},
 
-The child ${childName} is going to have a ${age} birthday in ${monthText}, please select a gift that costs around 600 Shekels to Achikam as soon as possible.
+The child ${childName} is going to have a ${age} birthday in ${timeDescription}, please select a gift that costs around 600 Shekels to Achikam as soon as possible.
 
 Please use this site https://enchanting-trifle-01bc26.netlify.app to send your presents.
 
