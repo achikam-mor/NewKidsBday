@@ -3,117 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
-    <style>
-        form {
-            margin: 0 auto;
-            width: 80%;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        
-        .names-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .kid {
-            font-size: 18px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .birthday-link {
-            display: block;
-            text-align: center;
-            margin: 20px auto;
-            padding: 15px 30px;
-            background-color: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            max-width: 300px;
-            transition: background-color 0.3s;
-        }
-        
-        .birthday-link:hover {
-            background-color: #5568d3;
-        }
-    </style>
+    <title>Gift Registry</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
-<body>
-    <a href="birthdays.html" class="birthday-link">🎂 View Birthdays / צפה בימי הולדת</a>
-    <div class="kids-names">
-        <div class="names-container">
-            <div class="kid">Itay</div>
-            <div class="kid">Meshi</div>
-            <div class="kid">Tamar</div>
-            <div class="kid">Ivri</div>
-            <div class="kid">Aviv</div>
-            <div class="kid">Rom</div>
+<body>    <header>
+        <div class="hero-container">
+            <div class="hero-image-container">
+                <img src="images/header.jpeg" alt="Gift registry header" class="hero-image">
+                <div class="hero-overlay"></div>
+                <h1 class="hero-title">בחרו מתנות לאהובים שלכם</h1>
+                <a href="birthdays.html" class="birthday-btn">
+                    <i class="fas fa-birthday-cake"></i> ימי הולדת
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="kids-section">
+            <div class="container">
+                <h2>בחרו ילד</h2>
+                <div class="kids-grid">
+                    <div class="kid-circle" data-name="Itay">
+                        <div class="circle-img">
+                            <img src="images/itay.jpg" alt="Itay" class="kid-img">
+                        </div>
+                        <h3>איתי</h3>
+                    </div>
+                    <div class="kid-circle" data-name="Meshi">
+                        <div class="circle-img">
+                            <img src="images/meshi.jpg" alt="Meshi" class="kid-img">
+                        </div>
+                        <h3>משי</h3>
+                    </div>
+                    <div class="kid-circle" data-name="Aviv">
+                        <div class="circle-img">
+                            <img src="images/aviv.jpg" alt="Aviv" class="kid-img">
+                        </div>
+                        <h3>אביב</h3>
+                    </div>
+                    <div class="kid-circle" data-name="Tamar">
+                        <div class="circle-img">
+                            <img src="images/tamar.jpg" alt="Tamar" class="kid-img">
+                        </div>
+                        <h3>תמר</h3>
+                    </div>
+                    <div class="kid-circle" data-name="Ivri">
+                        <div class="circle-img">
+                            <img src="images/ivri.jpg" alt="Ivri" class="kid-img">
+                        </div>
+                        <h3>עברי</h3>
+                    </div>
+                    <div class="kid-circle" data-name="Rom">
+                        <div class="circle-img">
+                            <img src="images/rom.jpg" alt="Rom" class="kid-img">
+                        </div>
+                        <h3>רום</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <div class="container">
+                <h2>טופס מתנה לילד</h2>
+                <form id="giftForm" class="gift-form">
+                    <div class="form-group">
+                        <label for="name">השם שלך</label>
+                        <input type="text" id="name" name="name" required placeholder="הכנס את שמך">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdate">תאריך לידה</label>
+                        <input type="date" id="birthdate" name="birthdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gifts">רעיונות למתנות</label>
+                        <textarea id="gifts" name="gifts" rows="4" placeholder="הכנס רעיונות למתנות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="links">לינקים למתנות</label>
+                        <textarea id="links" name="links" rows="4" placeholder="הכנס לינקים למתנות (אחד בשורה)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectedChild">ילד נבחר</label>
+                        <input type="text" id="selectedChild" name="selectedChild" readonly>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit" class="submit-btn">
+                            <span>שלח</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Gift Registry. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Thank You!</h2>
+            <p>Your gift registration has been submitted successfully.</p>
         </div>
     </div>
-    <h1>Fill in the details for <span id="child-name"></span></h1>
-    <form id="details-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name"><br><br>
-        <label for="gifts">Gifts:</label>
-        <input type="text" id="gifts" name="gifts"><br><br>
-        <label for="links">Links for gifts:</label>
-        <input type="text" id="links" name="links"><br><br>
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address"><br><br>
-        <button type="submit">Submit</button>
-    </form>
-    <script>
-    const form = document.querySelector('form');
-    const API_URL = window.location.hostname === 'localhost' 
-        ? 'http://localhost:3000'
-        : 'https://enchanting-trifle-01bc26.netlify.app';
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('name').value,
-            gifts: document.getElementById('gifts').value,
-            links: document.getElementById('links').value,
-            address: document.getElementById('address').value
-        };
-
-        try {
-            const response = await fetch(`${API_URL}/send`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                alert('Form submitted successfully!');
-                form.reset();
-            } else {
-                throw new Error('Network response was not ok');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('There was a problem submitting the form');
-        }
-    });
-</script>
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>
