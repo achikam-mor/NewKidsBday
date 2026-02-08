@@ -1,13 +1,5 @@
-// EmailJS configuration
-// Replace these with the IDs you got from your EmailJS account
-const EMAILJS_USER_ID = 'Wba6DXKooGEeFURmU'; // Your EmailJS User ID (from Account > API Keys)
-const EMAILJS_SERVICE_ID = 'service_v31t38c'; // Your EmailJS Service ID (from Email Services)
-const EMAILJS_TEMPLATE_ID = 'template_rg96ck9'; // Your EmailJS Template ID (from Email Templates)
-
-// Initialize EmailJS
-(function() {
-    emailjs.init(EMAILJS_USER_ID);
-})();
+// API Configuration
+const API_ENDPOINT = '/.netlify/functions/send-email';
 
 // DOM Elements
 const kidCircles = document.querySelectorAll('.kid-circle');
@@ -52,16 +44,21 @@ giftForm.addEventListener('submit', function(e) {
         selectedChild: selectedChildInput.value
     };
     
-    // Send email using EmailJS
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: 'Achikamor@gmail.com',
-        from_name: formData.name,
-        child_name: formData.selectedChild,
-        birthdate: formData.birthdate,
-        gifts: formData.gifts,
-        links: formData.links
+    // Send email using Netlify function
+    fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
     })
-    .then(function() {
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
         // Hide loading indicator
         hideLoading();
         
@@ -75,12 +72,12 @@ giftForm.addEventListener('submit', function(e) {
         kidCircles.forEach(circle => circle.classList.remove('selected'));
         selectedChildInput.value = '';
     })
-    .catch(function(error) {
+    .catch(error => {
         // Hide loading indicator
         hideLoading();
         
         // Show error message
-        console.error('EmailJS error:', error);
+        console.error('Send email error:', error);
         alert('Failed to send your gift registration. Please try again later.');
     });
 });

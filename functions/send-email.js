@@ -6,9 +6,26 @@ exports.handler = async function(event, context) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
   
+  // Add CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+  
+  // Handle OPTIONS request for CORS
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: ''
+    };
+  }
+  
   try {
     // Parse the incoming data
-    const { name, gifts, links, address } = JSON.parse(event.body);
+    const { name, birthdate, gifts, links, selectedChild } = JSON.parse(event.body);
     
     // Gmail transporter setup (using environment variables)
     const transporter = nodemailer.createTransport({
@@ -19,25 +36,43 @@ exports.handler = async function(event, context) {
       }
     });
     
+    // Format the email body
+    const emailBody = `
+New Gift Registration
+
+From: ${name}
+Birthdate: ${birthdate}
+Child: ${selectedChild}
+
+Gift Ideas:
+${gifts || 'None provided'}
+
+Links:
+${links || 'None provided'}
+    `;
+    
     const mailOptions = {
-      from: 'achikamor@gmail.com',
+      from: process.env.EMAIL_USER || 'achikamor@gmail.com',
       to: 'achikamor@gmail.com',
-      subject: `Details for ${name}`,
-      text: `Gifts: ${gifts}\nLinks: ${links}\nAddress: ${address}`
+      subject: `Gift Registration for ${selectedChild} from ${name}`,
+      text: emailBody
     };
     
     // Send the email
     const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.messageId);
     
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Email sent successfully!' })
+      headers,
+      body: JSON.stringify({ message: 'Email sent successfully!', messageId: info.messageId })
     };
   } catch (error) {
     console.error('Function error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      headers,
+      body: JSON.stringify({ error: error.message, details: error.toString() })
     };
   }
 };
