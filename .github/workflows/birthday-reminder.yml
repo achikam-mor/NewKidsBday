@@ -7,6 +7,9 @@ on:
   workflow_dispatch:
     # Allows manual triggering for testing
 
+permissions:
+  contents: write
+
 jobs:
   check-birthdays:
     runs-on: ubuntu-latest
@@ -35,4 +38,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add counter.txt
           git commit -m "chore: append 'a' to counter.txt [skip ci]"
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
