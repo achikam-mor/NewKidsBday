@@ -8,10 +8,10 @@ exports.handler = async function(event, context) {
   
   try {
     // Parse the incoming data
-    const { recipientEmail, recipientName, childName, age, timeDescription } = JSON.parse(event.body);
+    const { recipientEmail, recipientName, personName, age, timeDescription, gender, messageType } = JSON.parse(event.body);
     
     // Validate required fields
-    if (!recipientEmail || !recipientName || !childName || !age || !timeDescription) {
+    if (!recipientEmail || !recipientName || !personName || !messageType) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Missing required fields' })
@@ -26,19 +26,34 @@ exports.handler = async function(event, context) {
         pass: process.env.EMAIL_PASSWORD
       }
     });
-    
-    const mailOptions = {
-      from: 'achikamor@gmail.com',
-      to: recipientEmail,
-      subject: `Birthday Reminder: ${childName}'s ${age} birthday`,
-      text: `Dear ${recipientName},
 
-The child ${childName} is going to have a ${age} birthday in ${timeDescription}, please select a gift that costs around 600 Shekels to Achikam as soon as possible.
+    const genderPronoun = gender === 'f' ? 'her' : 'him';
+
+    let subject, emailText;
+    if (messageType === 'dayBefore') {
+      subject = `Birthday Tomorrow: ${personName}!`;
+      emailText = `Dear ${recipientName},
+
+${personName} will have a birthday tomorrow (turns ${age}), don't forget to wish ${genderPronoun} 'Mazal Tov'.
+
+Achikam automatic reminder`;
+    } else {
+      subject = `Birthday Reminder: ${personName}'s ${age} birthday`;
+      emailText = `Dear ${recipientName},
+
+${personName} is going to have a ${age} birthday in ${timeDescription}, please select a gift that costs around 600 Shekels to Achikam as soon as possible.
 
 Please use this site https://enchanting-trifle-01bc26.netlify.app to send your presents.
 
 Best regards,
-Birthday Reminder System`
+Birthday Reminder System`;
+    }
+
+    const mailOptions = {
+      from: 'achikamor@gmail.com',
+      to: recipientEmail,
+      subject,
+      text: emailText
     };
     
     // Send the email
@@ -49,7 +64,7 @@ Birthday Reminder System`
       body: JSON.stringify({ 
         message: 'Birthday reminder email sent successfully!',
         recipient: recipientEmail,
-        child: childName
+        person: personName
       })
     };
   } catch (error) {

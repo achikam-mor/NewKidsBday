@@ -70,17 +70,19 @@ function calculateUpcomingAge(birthYear) {
 }
 
 // Send email via Netlify function
-async function sendBirthdayEmail(recipientEmail, recipientName, childName, age, timeDescription) {
+async function sendBirthdayEmail(recipientEmail, recipientName, personName, age, timeDescription, gender = 'm', messageType = 'reminder') {
   try {
     const response = await axios.post(NETLIFY_FUNCTION_URL, {
       recipientEmail,
       recipientName,
-      childName,
+      personName,
       age,
-      timeDescription
+      timeDescription,
+      gender,
+      messageType
     });
     
-    console.log(`✓ Email sent to ${recipientName} (${recipientEmail}) for ${childName}'s birthday`);
+    console.log(`✓ Email sent to ${recipientName} (${recipientEmail}) for ${personName}'s birthday`);
     return response.data;
   } catch (error) {
     console.error(`✗ Failed to send email to ${recipientEmail}:`, error.message);
@@ -101,7 +103,7 @@ async function checkBirthdays() {
   
   // Check each birthday
   for (const birthdayEntry of birthdays) {
-    const { name, birthday, birthYear, recipients: recipientEmails } = birthdayEntry;
+    const { name, birthday, birthYear, gender, recipients: recipientEmails } = birthdayEntry;
     
     // Check for 2 months (60 days), 1 month (30 days), 3 weeks (21 days), and 2 weeks (14 days) before
     for (const daysBefore of [60, 30, 21, 14]) {
@@ -118,7 +120,7 @@ async function checkBirthdays() {
           const recipientName = recipients[recipientEmail] || recipientEmail;
           
           try {
-            await sendBirthdayEmail(recipientEmail, recipientName, name, age, timeDescription);
+            await sendBirthdayEmail(recipientEmail, recipientName, name, age, timeDescription, gender);
             emailsSent++;
           } catch (error) {
             console.error(`Failed to send email to ${recipientEmail}`);
@@ -127,6 +129,23 @@ async function checkBirthdays() {
         
         console.log('');
       }
+    }
+
+    // Check for 1 day before: send Mazal Tov reminder to ALL participants
+    if (shouldSendReminderDays(birthday, 1)) {
+      const age = calculateUpcomingAge(birthYear);
+      console.log(`🎉 Tomorrow is ${name}'s birthday (turns ${age})! Sending Mazal Tov reminders to all...`);
+      
+      for (const [recipientEmail, recipientName] of Object.entries(recipients)) {
+        try {
+          await sendBirthdayEmail(recipientEmail, recipientName, name, age, null, gender, 'dayBefore');
+          emailsSent++;
+        } catch (error) {
+          console.error(`Failed to send day-before email to ${recipientEmail}`);
+        }
+      }
+      
+      console.log('');
     }
   }
   
